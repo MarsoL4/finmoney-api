@@ -12,11 +12,7 @@ public class CategoryController {
 
     @RequestMapping(produces = "application/json", path = "/categories", method = {RequestMethod.GET})
     public Category index(){
-        return """
-            {
-                "name": "Educação"
-            }
-        """;
+        return new Category(1L, "Educação", "book");
     }
 
 }
