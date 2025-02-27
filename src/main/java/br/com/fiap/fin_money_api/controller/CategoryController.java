@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -17,11 +18,13 @@ public class CategoryController {
 
     private List<Category> repository = new ArrayList<>();
 
+    //Busca todos registros
     @GetMapping(path = "/categories")
     public List<Category> index(){
         return repository;
     }
 
+    //Insere um registro manual (via body)
     @PostMapping("/categories")
     @ResponseStatus(code = HttpStatus.CREATED) //Status que será passado em caso de sucesso ao Postman
     public Category create(@RequestBody Category category){
@@ -29,6 +32,13 @@ public class CategoryController {
         repository.add(category);
         return category;
     }
+
+    //Busca um registro específico pelo id
+    @GetMapping("/categories/{id}")
+    public void get(@PathVariable Long id){
+        System.out.println("Buscando Categoria");
+    }
+    
 
 
 }
