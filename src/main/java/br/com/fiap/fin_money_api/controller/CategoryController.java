@@ -1,7 +1,7 @@
 package br.com.fiap.fin_money_api.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.fiap.fin_money_api.model.Category;
@@ -10,9 +10,14 @@ import br.com.fiap.fin_money_api.model.Category;
 public class CategoryController {
 
 
-    @RequestMapping(produces = "application/json", path = "/categories", method = {RequestMethod.GET})
+    @GetMapping(path = "/categories")
     public Category index(){
         return new Category(1L, "Educação", "book");
+    }
+
+    @PostMapping("/categories")
+    public void create(){
+        
     }
 
 }
