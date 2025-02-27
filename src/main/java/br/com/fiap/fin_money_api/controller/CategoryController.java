@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,8 +36,17 @@ public class CategoryController {
 
     //Busca um registro específico pelo id
     @GetMapping("/categories/{id}")
-    public void get(@PathVariable Long id){
-        System.out.println("Buscando Categoria");
+    public ResponseEntity<Category> get(@PathVariable Long id){
+        System.out.println("Buscando Categoria " + id);
+        var category = repository.stream()
+                .filter(c -> c.getId().equals(id))
+                .findFirst();
+
+        if (category.isEmpty()){ //se estiver vazia
+            return ResponseEntity.notFound().build();
+        }
+        
+        return ResponseEntity.ok(category.get()); //se existir
     }
     
 
