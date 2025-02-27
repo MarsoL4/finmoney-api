@@ -17,7 +17,8 @@ public class CategoryController {
 
     @PostMapping("/categories")
     public void create(){
-        
+        System.out.println("Cadastrando categoria");
+
     }
 
 }
