@@ -66,7 +66,7 @@ public class CategoryController {
     public ResponseEntity<Category> update(@PathVariable Long id, @RequestBody Category category) {
         log.info("Atualizando categoria " + id + " com " + category);
 
-        var categoryToUpdate = getCategory(id);
+        getCategory(id);
         category.setId(id);
         repository.save(category);
         return ResponseEntity.ok(category);
