@@ -3,9 +3,11 @@ package br.com.fiap.fin_money_api.model;
 import java.util.Random;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
 @Entity
 public class Category {
+    @Id
     private Long id;
     private String name;
     private String icon;
