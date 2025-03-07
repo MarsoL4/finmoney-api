@@ -1,22 +1,19 @@
 package br.com.fiap.fin_money_api.model;
 
-import java.util.Random;
-
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
 public class Category {
-    @Id
+    
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) //Define o id como PK e que será gerado automaticamente
     private Long id;
     private String name;
     private String icon;
 
-    public Category(Long id, String name, String icon) {
-        this.id = Math.abs(new Random().nextLong()); //Gera uma id aleatória automaticamente
-        this.name = name;
-        this.icon = icon;
-    }
+    //Boilerplate - cliche
 
     public Long getId() {
         return id;
