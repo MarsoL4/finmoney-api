@@ -25,18 +25,20 @@ import br.com.fiap.fin_money_api.repository.CategoryRepository;
 @RequestMapping("categories")
 public class CategoryController {
 
+    //Logger para registrar as operações do controller
     private final Logger log = LoggerFactory.getLogger(getClass());
-
-    @Autowired // Injeção de dependência
+    
+    //Injeta o repositório de categorias
+    @Autowired
     private CategoryRepository repository;
 
-    //Busca todos registros
-    @GetMapping("/categories")
+    //Busca todas as Categories cadastradas
+    @GetMapping
     public List<Category> index() {
         return repository.findAll();
     }
-    
-    //Insere um registro manual (via body)
+
+    //Cadastra uma nova Category
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     public Category create(@RequestBody Category category) {
@@ -45,14 +47,14 @@ public class CategoryController {
         return category;
     }
 
-    //Busca um registro específico pelo id
+    //Busca uma Category pelo ID
     @GetMapping("{id}")
     public ResponseEntity<Category> get(@PathVariable Long id) {
         log.info("Buscando categoria " + id);
         return ResponseEntity.ok(getCategory(id));
     }
-    
-    //Deleta uma categoria cadastrada pelo id
+
+    //Deleta uma Category pelo ID
     @DeleteMapping("{id}")
     public ResponseEntity<Category> delete(@PathVariable Long id) {
         log.info("Deletando categoria " + id);
@@ -60,7 +62,7 @@ public class CategoryController {
         return ResponseEntity.noContent().build();
     }
 
-    //Atualiza uma categoria já existente
+    //Atualiza uma Category pelo ID
     @PutMapping("{id}")
     public ResponseEntity<Category> update(@PathVariable Long id, @RequestBody Category category) {
         log.info("Atualizando categoria " + id + " com " + category);
@@ -71,9 +73,12 @@ public class CategoryController {
         return ResponseEntity.ok(category);
     }
 
+    //Valida e retorna a categoria existente ou lança erro 404
     private Category getCategory(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Categoria não encontrada"));
+                .orElseThrow(
+                    () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Categoria não encontrada")
+                );
     }
 
 }
