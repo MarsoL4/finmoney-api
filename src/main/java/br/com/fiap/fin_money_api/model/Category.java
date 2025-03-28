@@ -4,6 +4,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 
@@ -13,31 +16,13 @@ public class Category {
     
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) //Define o id como PK e que será gerado automaticamente
     private Long id;
+
+    @NotBlank //Não pode estar em branco
+    @Size(min = 3) //Mínimo de Caracteres
     private String name;
+
+    @NotBlank(message = "Não Ppode estar em branco")
+    @Pattern(regexp = "^[A-Z].*$", message = "Deve começar com letra maiúscula") //Deve iniciar com letra Maiúscula
     private String icon;
-    
-    /*
-    //Boilerplate - clichê:
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getIcon() {
-        return icon;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    @Override
-    public String toString() {
-        return "Category [id=" + id + ", name=" + name + ", icon=" + icon + "]";
-    }
-    */
     
 }

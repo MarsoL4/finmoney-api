@@ -20,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import br.com.fiap.fin_money_api.model.Category;
 import br.com.fiap.fin_money_api.repository.CategoryRepository;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("categories")
@@ -41,10 +42,9 @@ public class CategoryController {
     //Cadastra uma nova Category
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    public Category create(@RequestBody Category category) {
+    public Category create(@RequestBody @Valid Category category) {
         log.info("Cadastrando categoria " + category.getName());
-        repository.save(category);
-        return category;
+        return repository.save(category);
     }
 
     //Busca uma Category pelo ID
