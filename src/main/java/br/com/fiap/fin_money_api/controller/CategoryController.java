@@ -20,6 +20,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import br.com.fiap.fin_money_api.model.Category;
 import br.com.fiap.fin_money_api.repository.CategoryRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 
 @RestController
@@ -33,14 +35,22 @@ public class CategoryController {
     @Autowired
     private CategoryRepository repository;
 
-    //Busca todas as Categories cadastradas
     @GetMapping
+    @Operation(
+        summary = "Listar Categorias",
+        description = "Retorna um array com todas as Categorias"
+    )
     public List<Category> index() {
         return repository.findAll();
     }
 
-    //Cadastra uma nova Category
     @PostMapping
+    @Operation(
+        summary = "Cadastrar uma nova Categoria",
+        //deprecated = true, //O endpoint aparece mas não é mais utilizado
+        //hidden = true //O endpoint não aparece
+        responses = @ApiResponse(responseCode = "400", description = "Validação Falhou")
+    )
     @ResponseStatus(code = HttpStatus.CREATED)
     public Category create(@RequestBody @Valid Category category) {
         log.info("Cadastrando categoria " + category.getName());
@@ -49,6 +59,11 @@ public class CategoryController {
 
     //Busca uma Category pelo ID
     @GetMapping("{id}")
+    @Operation(
+        summary = "Buscar uma Categoria pelo ID",
+        description = "Retorna os dados de uma Category",
+        responses = @ApiResponse(responseCode = "404", description = "Categoria não encontrada")
+    )
     public ResponseEntity<Category> get(@PathVariable Long id) {
         log.info("Buscando categoria " + id);
         return ResponseEntity.ok(getCategory(id));
