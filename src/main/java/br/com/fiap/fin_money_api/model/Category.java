@@ -7,11 +7,17 @@ import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 @Entity
-@Data //Vai gerar getters, setters, etc para essa classe (lombok)
+@Data //Vai gerar getters, setters, etc para essa classe (lombok) -> Também gera um construtor desde que já não esteja sendo gerado por código ou outro @ do lombok
+@Builder
+@NoArgsConstructor // Gera um construtor sem argumentos
+@AllArgsConstructor // Gera um construtor com todos argumentos
 public class Category {
     
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) //Define o id como PK e que será gerado automaticamente
