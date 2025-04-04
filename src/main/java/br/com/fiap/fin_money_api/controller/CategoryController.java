@@ -5,6 +5,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -40,11 +42,13 @@ public class CategoryController {
         summary = "Listar Categorias",
         description = "Retorna um array com todas as Categorias"
     )
+    @Cacheable("categories") //Deixa essa requisição salva em memória para evitar repetição de SELECT e melhorar o desempenho da API
     public List<Category> index() {
         return repository.findAll();
     }
 
     @PostMapping
+    @CacheEvict(value = "categories", allEntries = true) //Invalida o cache salvo de categorias da última requisição GET e faz uma nova após o POST (Cadastro de uma Nova Categoria)
     @Operation(
         summary = "Cadastrar uma nova Categoria",
         //deprecated = true, //O endpoint aparece mas não é mais utilizado
@@ -57,7 +61,6 @@ public class CategoryController {
         return repository.save(category);
     }
 
-    //Busca uma Category pelo ID
     @GetMapping("{id}")
     @Operation(
         summary = "Buscar uma Categoria pelo ID",
@@ -69,16 +72,22 @@ public class CategoryController {
         return ResponseEntity.ok(getCategory(id));
     }
 
-    //Deleta uma Category pelo ID
     @DeleteMapping("{id}")
+    @Operation(
+        summary = "Deletar uma Categoria pelo ID",
+        responses = @ApiResponse(responseCode = "404", description = "Categoria não encontrada")
+    )
     public ResponseEntity<Category> delete(@PathVariable Long id) {
         log.info("Deletando categoria " + id);
         repository.delete(getCategory(id));
         return ResponseEntity.noContent().build();
     }
 
-    //Atualiza uma Category pelo ID
     @PutMapping("{id}")
+    @Operation(
+        summary = "Atualizar uma Categoria pelo ID",
+        responses = @ApiResponse(responseCode = "404", description = "Categoria não encontrada")
+    )
     public ResponseEntity<Category> update(@PathVariable Long id, @RequestBody Category category) {
         log.info("Atualizando categoria " + id + " com " + category);
 
