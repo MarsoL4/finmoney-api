@@ -1,9 +1,12 @@
 package br.com.fiap.fin_money_api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -30,5 +33,9 @@ public class Category {
     @NotBlank(message = "Não Ppode estar em branco")
     @Pattern(regexp = "^[A-Z].*$", message = "Deve começar com letra maiúscula") //Deve iniciar com letra Maiúscula
     private String icon;
+
+    @ManyToOne
+    @JsonIgnore //Não vai passar no json de resposta e nem receber no body (raw)
+    private User user;
     
 }
