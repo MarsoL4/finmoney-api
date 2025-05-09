@@ -15,16 +15,26 @@ import br.com.fiap.fin_money_api.model.User;
 @Service
 public class TokenService {
 
-    private Instant expiresAt = LocalDateTime.now().plusMinutes(10).toInstant(ZoneOffset.ofHours(-3));
+    private Instant expiresAt = LocalDateTime.now().plusDays(1).toInstant(ZoneOffset.ofHours(-3)); //Token de login do usuário tem 1 dia de validade
     private Algorithm algorithm = Algorithm.HMAC256("secret");
     
     public Token createToken(User user){
         var jwt = JWT.create()
-           .withSubject(user.getId().toString())
+            .withSubject(user.getId().toString())
            .withClaim("email", user.getEmail())
            .withExpiresAt(expiresAt)
            .sign(algorithm);
 
         return new Token(jwt, user.getEmail());
     }
+
+    public User getUserFromToken(String token){
+        var verifiedToken = JWT.require(algorithm).build().verify(token);
+
+        return User.builder()
+                .id(Long.valueOf(verifiedToken.getSubject()))
+                .email(verifiedToken.getClaim("email").toString())
+                .build();
+    }
+
 }

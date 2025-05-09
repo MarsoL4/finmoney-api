@@ -2,6 +2,7 @@ package br.com.fiap.fin_money_api.config;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,9 +15,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 public class SecurityConfig {
+
+    @Autowired
+    private AuthFilter authFilter;
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
@@ -28,6 +33,7 @@ public class SecurityConfig {
                 
         )
         .csrf(csrf -> csrf.disable()) //Por ser uma APIRest não faz sentido ter CSRF
+        .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
         .httpBasic(Customizer.withDefaults())
         .build();
     }
