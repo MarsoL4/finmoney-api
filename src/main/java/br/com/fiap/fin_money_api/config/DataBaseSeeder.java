@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +21,7 @@ import br.com.fiap.fin_money_api.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
 
 @Component
+@Profile("dev") //Só irá rodar se a aplicação estiver sendo rodada com o profile "dev" definida no application.properties
 public class DataBaseSeeder {
 
     @Autowired
@@ -36,14 +38,14 @@ public class DataBaseSeeder {
 
     @PostConstruct
     public void init() {
-        
-        //Seeder de Usuário
+
+        // Seeder de Usuário
         String password = passwordEncoder.encode("12345");
         var joao = User.builder().email("joao@fiap.com.br").password(password).build();
         var maria = User.builder().email("maria@fiap.com.br").password(password).build();
         userRepository.saveAll(List.of(joao, maria));
-        
-        //Seeder de Categorias
+
+        // Seeder de Categorias
         var categories = List.of(
                 Category.builder().name("Educação").icon("Book").user(joao).build(),
                 Category.builder().name("Lazer").icon("Dices").user(joao).build(),
@@ -53,7 +55,7 @@ public class DataBaseSeeder {
 
         categoryRepository.saveAll(categories);
 
-        //Seeder de Transactions
+        // Seeder de Transactions
         var descriptions = List.of("Uber para faculdade", "Remédio", "Café especial", "Livro didático", "Cinema",
                 "Bilhete Único", "Restaurante", "Faculdade", "Plano de Saúde", "Aluguel", "Conta de Água",
                 "Conta de Luz", "Streaming");
